@@ -1,0 +1,74 @@
+{
+	"name": "diff-stats",
+	"displayName": "Diff Stats",
+	"author": "Vitaly Kravchenko <vitalyx@gmail.com>",
+	"description": "Uncommitted Git file and line counts in the status bar",
+	"version": "1.0.0",
+	"keywords": [
+		"vscode",
+		"git",
+		"diff",
+		"stats",
+		"status bar"
+	],
+	"homepage": "https://github.com/yay/diff-stats",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/yay/diff-stats.git"
+	},
+	"bugs": {
+		"url": "https://github.com/yay/diff-stats/issues",
+		"email": "vitalyx@gmail.com"
+	},
+	"license": "MIT",
+	"main": "./out/extension.js",
+	"scripts": {
+		"package": "npm run compile && vsce package --no-dependencies -o extension.vsix",
+		"compile": "npm run clean && tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"test": "npm run compile && node --test test/*.test.js",
+		"test:host": "npm run compile && node test/runHost.js",
+		"clean": "node -e \"require('fs').rmSync('out', { recursive: true, force: true })\""
+	},
+	"engines": {
+		"node": ">=22",
+		"vscode": "^1.144.0"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"@types/node": "^22.20.5",
+		"@types/vscode": "1.144.0",
+		"@vscode/vsce": "4.1.0",
+		"typescript": "7.0.2"
+	},
+	"publisher": "yay",
+	"galleryBanner": {
+		"color": "#FAFAFA",
+		"theme": "light"
+	},
+	"categories": [
+		"Other"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"contributes": {
+		"configuration": {
+			"type": "object",
+			"title": "Diff Stats",
+			"properties": {
+				"diffStats.enabled": {
+					"type": "boolean",
+					"description": "Show uncommitted Git changes in the status bar",
+					"default": true
+				},
+				"diffStats.priority": {
+					"type": "number",
+					"description": "Status bar priority of the change summary (higher values appear farther left)",
+					"default": 1
+				}
+			}
+		}
+	},
+	"icon": "assets/icon.png"
+}
