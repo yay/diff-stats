@@ -117,9 +117,11 @@ export default class ChangesStatusBar implements vscode.Disposable {
     try {
       const summary = await collectChanges(runner, repository.rootUri.fsPath)
       if (this.disposed || generation !== this.generation) return
+      const net = summary.insertions - summary.deletions
+      const netLabel = net >= 0 ? `+${net}` : `${net}`
       item.text = summary.files === 0 ? 'No changes' :
-        `${summary.files} ${summary.files === 1 ? 'File' : 'Files'} +${summary.insertions} −${summary.deletions}`
-      item.tooltip = `${repository.rootUri.fsPath}\nView uncommitted changes in Source Control\nSaved staged, unstaged, and untracked files. Line counts are net changes against HEAD; binary files count only as files.`
+        `${summary.files} ${summary.files === 1 ? 'File' : 'Files'} +${summary.insertions} −${summary.deletions} Net: ${netLabel}`
+      item.tooltip = `${repository.rootUri.fsPath}\nView uncommitted changes in Source Control\nSaved staged, unstaged, and untracked files. Line counts compare the working tree against HEAD; net is insertions minus deletions; binary files count only as files.`
       item.show()
     } catch (error) {
       if (!this.disposed && generation === this.generation) {

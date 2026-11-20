@@ -6,7 +6,7 @@ Requires VS Code 1.144 or newer.
 
 ## Git change summary
 
-The status bar shows counts such as **1 File +34 −73**, or **No changes** when the repository is clean. Click the summary to open Source Control. Hover to see which repository is being counted.
+The status bar shows counts such as **1 File +34 −73 Net: -39**, or **No changes** when the repository is clean. The **Net** figure is insertions minus deletions, shown with an explicit sign (for example, **16 Files +245 −83 Net: +162**). Click the summary to open Source Control. Hover to see which repository is being counted.
 
 Counts include saved staged, unstaged, and non-ignored untracked files. Each changed file is counted once; line totals compare the working tree with `HEAD`, so staging the same edit does not count it twice. Untracked text files count as additions, and binary files count toward the file total only. Repositories without an initial commit are supported. Unsaved editor buffers are excluded; counts are independent of Chat sessions.
 

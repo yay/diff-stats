@@ -15,7 +15,7 @@ function event() {
 }
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-test('status bar selection, refresh, settings, failures, cancellation and disposal', async () => {
+test('status bar selection, refresh, settings, failures, cancellation and disposal; signed net', async () => {
   const config = { enabled: true, priority: 1 }
   const editorChanged = event(), configurationChanged = event(), enablementChanged = event()
   const opened = event(), closed = event()
@@ -61,11 +61,21 @@ test('status bar selection, refresh, settings, failures, cancellation and dispos
   const controller = new ChangesStatusBar()
   try {
     await delay(260)
-    assert.equal(items[0].text, '1 File +34 −73')
+    assert.equal(items[0].text, '1 File +34 −73 Net: -39')
     assert.equal(items[0].command, 'workbench.view.scm')
     assert.equal(items[0].priority, 1)
     assert.equal(calls.at(-1), '/first')
     assert.match(items[0].tooltip, /\/first/)
+
+    result = async () => ({ files: 16, insertions: 245, deletions: 83 })
+    first.state.onDidChange.fire()
+    await delay(230)
+    assert.equal(items[0].text, '16 Files +245 −83 Net: +162')
+
+    result = async () => ({ files: 1, insertions: 2, deletions: 2 })
+    first.state.onDidChange.fire()
+    await delay(230)
+    assert.equal(items[0].text, '1 File +2 −2 Net: +0')
 
     second.ui.selected = true
     second.ui.onDidChange.fire()
@@ -108,7 +118,7 @@ test('status bar selection, refresh, settings, failures, cancellation and dispos
     configurationChanged.fire({ affectsConfiguration: section => section === 'diffStats' })
     await delay(230)
     assert.equal(items[1].priority, 5)
-    assert.equal(items[1].text, '2 Files +2 −0')
+    assert.equal(items[1].text, '2 Files +2 −0 Net: +2')
     git.enabled = false
     enablementChanged.fire(false)
     assert.equal(items[1].visible, false)
